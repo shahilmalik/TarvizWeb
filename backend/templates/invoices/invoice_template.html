@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #{{ invoice.invoice_id }}</title>
+    <style>
+        body { font-family: sans-serif; font-size: 14px; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .details { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Tarviz Digimart</h1>
+        <p>Invoice #{{ invoice.invoice_id }}</p>
+    </div>
+    <div class="details">
+        <p><strong>Date:</strong> {{ invoice.date }}</p>
+        <p><strong>Client:</strong> {{ invoice.client.get_full_name }} ({{ invoice.client.email }})</p>
+        <p><strong>Status:</strong> {{ invoice.status }}</p>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in invoice.services.all %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.description }}</td>
+                <td>{{ service.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: right;">
+        <h3>Total: {{ invoice.amount }}</h3>
+    </div>
+</body>
+</html>

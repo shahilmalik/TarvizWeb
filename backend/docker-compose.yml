@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=tarviz_db
+      - POSTGRES_USER=tarviz_user
+      - POSTGRES_PASSWORD=tarviz_password
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=dev_secret_key
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,[::1]
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=tarviz_db
+      - DB_USER=tarviz_user
+      - DB_PASSWORD=tarviz_password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - SENDGRID_API_KEY=your_sendgrid_key
+      - DEFAULT_FROM_EMAIL=no-reply@tarviz.com
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
